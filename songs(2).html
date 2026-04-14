@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Песни</title>
+
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+background:#eee;
+}
+
+header{
+background:white;
+padding:20px;
+text-align:center;
+}
+
+h1{
+margin:0;
+font-weight:900;
+font-size:28px;
+}
+
+#searchSong{
+width:80%;
+padding:12px;
+margin-top:10px;
+font-size:16px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+.song-list{
+margin:20px;
+border-radius:20px;
+overflow:hidden;
+background:white;
+}
+
+.song{
+padding:15px;
+border-bottom:1px solid #ddd;
+font-size:20px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.song:last-child{
+border-bottom:none;
+}
+
+.song:hover{
+background:#f2f2f2;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>ПЕСНИ</h1>
+<input type="text" id="searchSong" placeholder="Поиск песни...">
+</header>
+
+<div class="song-list" id="songList"></div>
+
+<script>
+
+
+const songs = [
+{ name: "Алые паруса", file: "songs/alie.html" },
+{ name: "Ты да я да мы с тобой", file: "songs/ti.html" },
+{ name: "Катюша", file: "songs/katu.html" },
+{ name: "Кабы не было зимы", file: "songs/kabi.html" },
+{ name: "Изгиб гитары желтой", file: "songs/izgib.html" },
+{ name: "Новогодние игрушки", file: "songs/novog.html" },
+{ name: "Ладога", file: "songs/ladoga.html" },
+{ name: "Маленький трубач", file: "songs/malenki.html" },
+{ name: "Хотят ли русские войны", file: "songs/hotiat.html" },
+{ name: "Милая моя", file: "songs/milaya.html" },
+{ name: "Про снежную бабу", file: "songs/probabu.html" },
+{ name: "Снежинка", file: "songs/snow.html" },
+{ name: "Три белых коня", file: "songs/tri.html" },
+{ name: "Колыбельная умке", file: "songs/umke.html" },
+{ name: "От героев былых времен", file: "songs/ot.html" },
+{ name: "Весеннее танго", file: "songs/.html" },
+{ name: "В лесу родилась елочка", file: "songs/ot.html" },
+
+];
+
+/ ВЫВОД /
+function renderSongs(list){
+const container = document.getElementById("songList");
+container.innerHTML = "";
+
+list.forEach(song=>{
+let div = document.createElement("div");
+div.className = "song";
+div.innerText = song.name;
+
+/ ПЕРЕХОД НА HTML /
+div.onclick = function(){
+window.location.href = song.file;
+};
+
+container.appendChild(div);
+});
+}
+
+/ ПОИСК /
+document.getElementById("searchSong").addEventListener("keyup", function(){
+
+let value = this.value.toLowerCase();
+
+let filtered = songs.filter(song =>
+song.name.toLowerCase().includes(value)
+);
+
+renderSongs(filtered);
+
+});
+
+/ СТАРТ */
+renderSongs(songs);
+
+</script>
+
+</body>
+</html>

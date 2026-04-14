@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Автоорская песня</title>
+
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+background:#eee;
+}
+
+
+header{
+background:white;
+padding:20px;
+text-align:center;
+}
+
+h1{
+margin:0;
+font-weight:900;
+font-size:28px;
+}
+
+
+input{
+width:80%;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+
+.menu{
+padding:20px;
+}
+
+.card{
+background:white;
+border-radius:20px;
+padding:30px;
+margin-bottom:15px;
+font-size:22px;
+font-weight:bold;
+cursor:pointer;
+transition:0.2s;
+}
+
+.card:hover{
+background:#f2f2f2;
+}
+
+
+.song-list{
+margin:20px;
+border-radius:20px;
+overflow:hidden;
+background:white;
+}
+
+.song{
+padding:15px;
+border-bottom:1px solid #ddd;
+font-size:18px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.song:last-child{
+border-bottom:none;
+}
+
+.song:hover{
+background:#f2f2f2;
+}
+
+
+.back{
+margin:20px;
+font-size:18px;
+cursor:pointer;
+}
+
+
+.hidden{
+display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>ПЕСНИ</h1>
+<input type="text" id="search" placeholder="Поиск...">
+</header>
+
+<!-- РАЗДЕЛЫ -->
+<div id="menu" class="menu">
+
+<div class="card" onclick="openCategory('bard')">Бардовские песни</div>
+<div class="card" onclick="openCategory('newyear')">Новогодние песни</div>
+<div class="card" onclick="openCategory('war')">Песни о войне</div>
+
+</div>
+
+<!-- СПИСОК ПЕСЕН -->
+<div id="songsPage" class="hidden">
+
+<div class="back" onclick="back()">← Назад</div>
+
+<div class="song-list" id="songList"></div>
+
+</div>
+
+<script>
+
+
+const allSongs = [
+{ name: "Милая моя", file: "songs/milaya.html" },
+{ name: "Изгиб гитары", file: "songs/izgib.html" },
+{ name: "Весеннее танго", file: "songs/vesennee.html" },
+{ name: "Алые паруса", file: "songs/alie.html" },
+{ name: "Ты да я да мы с тобой", file: "songs/ti.html" },
+{ name: "Бумажный солдат", file: "songs/soldat.html" },
+{ name: "Песнка мамонтенка", file: "songs/umke.html" },
+{ name: "Алые паруса(2)", file: "songs/alie2.html" },
+
+{ name: "Маленькой елочке холодно зимой", file: "songs/elochke.html" },
+{ name: "Про снежную бабу", file: "songs/probabu.html" },
+{ name: "Снежинка", file: "songs/snow.html" },
+{ name: "Три белых коня", file: "songs/tri.html" },
+{ name: "В лесу родилась елочка", file: "songs/vlesu.html" },
+{ name: "Кабы не было зимы", file: "songs/kabi.html" },
+{ name: "Новогодние игрушки", file: "songs/novog.html" },
+
+{ name: "Катюша", file: "songs/katu.html" },
+{ name: "А нам нужна одна победа", file: "songs/anam.html" },
+{ name: "День победы", file: "songs/day.html" },
+{ name: "Маленький трубач", file: "songs/malenki.html" },
+{ name: "Песня о ладоге", file: "songs/ladoga.html" },
+{ name: "От героев былых времен", file: "songs/ot.html" },
+{ name: "Хотят ли русские войны", file: "songs/hotiat.html" },
+{ name: "Атланты", file: "songs/atlant.html" },
+];
+
+/ КАТЕГОРИИ /
+const categories = {
+bard: allSongs.slice(0,8),
+newyear: allSongs.slice(8,15),
+war: allSongs.slice(15,23),
+};
+
+let currentSongs = null; // ВАЖНО: null, а не []
+
+/ ОТКРЫТЬ РАЗДЕЛ /
+function openCategory(name){
+
+document.getElementById("menu").classList.add("hidden");
+document.getElementById("songsPage").classList.remove("hidden");
+
+currentSongs = categories[name];
+
+renderSongs(currentSongs);
+}
+
+/ НАЗАД /
+function back(){
+document.getElementById("songsPage").classList.add("hidden");
+document.getElementById("menu").classList.remove("hidden");
+document.getElementById("search").value = "";
+currentSongs = null;
+}
+
+/ ВЫВОД /
+function renderSongs(list){
+
+const container = document.getElementById("songList");
+container.innerHTML = "";
+
+list.forEach(song=>{
+let div = document.createElement("div");
+div.className = "song";
+div.innerText = song.name;
+
+div.onclick = function(){
+window.location.href = song.file;
+};
+
+container.appendChild(div);
+});
+
+}
+
+/ ПОИСК /
+document.getElementById("search").addEventListener("keyup", function(){
+
+let value = this.value.toLowerCase();
+
+/ ЕСЛИ ПУСТО /
+if(value === ""){
+document.getElementById("songsPage").classList.add("hidden");
+document.getElementById("menu").classList.remove("hidden");
+currentSongs = null;
+return;
+}
+
+/ ПО КАКОМУ СПИСКУ ИСКАТЬ /
+let baseList = currentSongs ? currentSongs : allSongs;
+
+/ ФИЛЬТР /
+let filtered = baseList.filter(song =>
+song.name.toLowerCase().includes(value)
+);
+
+/ ПОКАЗЫВАЕМ РЕЗУЛЬТАТ */
+document.getElementById("menu").classList.add("hidden");
+document.getElementById("songsPage").classList.remove("hidden");
+
+renderSongs(filtered);
+
+});
+
+</script>
+
+</body>
+</html>
